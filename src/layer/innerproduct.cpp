@@ -56,7 +56,8 @@ int InnerProduct::forward(const Mat& bottom_blob, Mat& top_blob) const
     int channels = bottom_blob.c;
     int size = w * h;
 
-    top_blob.create(num_output);
+    // top_blob.create(num_output);
+    top_blob.create(1, 1, num_output, 4);
     if (top_blob.empty())
         return -100;
 
@@ -65,6 +66,7 @@ int InnerProduct::forward(const Mat& bottom_blob, Mat& top_blob) const
     for (int p=0; p<num_output; p++)
     {
         float sum = 0.f;
+        float* outptr = top_blob.channel(p);
 
         if (bias_term)
             sum = bias_data[p];
@@ -81,9 +83,9 @@ int InnerProduct::forward(const Mat& bottom_blob, Mat& top_blob) const
             }
         }
 
-        top_blob[p] = sum;
+       // top_blob[p] = sum;
+       outptr[0] = sum;
     }
-
     return 0;
 }
 
